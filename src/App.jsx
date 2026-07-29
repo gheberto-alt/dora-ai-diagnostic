@@ -129,6 +129,9 @@ export default function App() {
               <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico DORA AI'}</h1>
             </div>
           </div>
+          {mode === 'speaker' && (
+            <button onClick={resetAll} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-rose-300"><RefreshCw className="h-4 w-4" />Reiniciar conteo</button>
+          )}
         </div>
       </header>
 
@@ -139,7 +142,7 @@ export default function App() {
 
           <div className={`flex flex-wrap items-start justify-between gap-3 ${mode === 'attendee' ? 'mb-2 pb-1' : 'mb-5 border-b border-slate-800 pb-4'}`}>
             <div>
-              <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? 'Vista Speaker' : 'Vista Asistente'}</h2>
+              <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? '' : 'Vista Asistente'}</h2>
             </div>
           </div>
 
@@ -245,7 +248,6 @@ export default function App() {
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4">
                 <div className="flex items-center gap-3"><div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400"><Users className="h-5 w-5" /></div><div><div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Respuestas en tiempo real</div><div className="text-2xl font-black text-white">{aggregated.totalParticipants} <span className="text-sm font-medium text-slate-400">participantes</span></div></div></div>
-                <button onClick={resetAll} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-rose-300"><RefreshCw className="h-4 w-4" />Reiniciar conteo</button>
               </div>
               <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5 lg:p-6">
