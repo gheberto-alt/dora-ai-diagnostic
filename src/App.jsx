@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   ChevronRight,
   RefreshCw,
-  ShieldCheck,
   Sparkles,
   Users,
   Zap,
@@ -27,17 +26,13 @@ import {
 import { QUESTIONS } from './data';
 import { clearResponses, createResponse, getSessionId, listResponses, subscribeToResponses } from './lib/storage';
 import { isSupabaseConfigured } from './lib/supabase';
-import { aggregateResponses, calculateAverage, getArchetypeInfo, getBaseUrl, getRouteMode } from './utils';
-
-const speakerAccessKey = import.meta.env.VITE_SPEAKER_ACCESS_KEY;
+import { aggregateResponses, calculateAverage, getArchetypeInfo, getRouteMode } from './utils';
 
 export default function App() {
   const [mode, setMode] = useState(getRouteMode(window.location.pathname));
   const [responses, setResponses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [speakerAllowed, setSpeakerAllowed] = useState(!speakerAccessKey);
-  const [speakerKey, setSpeakerKey] = useState('');
 
   const [participantInfo, setParticipantInfo] = useState({ name: '', email: '' });
   const [answers, setAnswers] = useState({});
@@ -135,9 +130,6 @@ export default function App() {
               <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? 'Vista Speaker' : 'Vista Asistente'}</h2>
               <p className="mt-1 text-sm text-slate-400">{isSupabaseConfigured ? 'Datos en Supabase con realtime.' : 'Modo demo local activo mientras configuras Supabase.'}</p>
             </div>
-            <div className="flex flex-col items-end gap-2 text-xs text-slate-400">
-              <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1">Modo datos: {isSupabaseConfigured ? 'Cloud' : 'Local fallback'}</span>
-            </div>
           </div>
 
           {mode === 'attendee' && (
@@ -204,19 +196,7 @@ export default function App() {
             )
           )}
 
-          {mode === 'speaker' && !speakerAllowed && (
-            <div className="mx-auto max-w-md space-y-4 pt-8 text-center">
-              <div className="mx-auto inline-flex rounded-full border border-amber-500/20 bg-amber-500/10 p-3 text-amber-300"><ShieldCheck className="h-7 w-7" /></div>
-              <h3 className="text-2xl font-bold">Protección simple para speaker</h3>
-              <p className="text-sm text-slate-400">Ingresa la clave definida en <code>VITE_SPEAKER_ACCESS_KEY</code>.</p>
-              <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                <input type="password" value={speakerKey} onChange={(e) => setSpeakerKey(e.target.value)} placeholder="Clave del speaker" className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm outline-none focus:border-cyan-500" />
-                <button onClick={() => speakerKey === speakerAccessKey ? (setSpeakerAllowed(true), setError('')) : setError('La clave del speaker no coincide.')} className="mt-3 w-full rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-bold text-slate-950">Entrar a la vista speaker</button>
-              </div>
-            </div>
-          )}
-
-          {mode === 'speaker' && speakerAllowed && (
+          {mode === 'speaker' && (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4">
                 <div className="flex items-center gap-3"><div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400"><Users className="h-5 w-5" /></div><div><div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Respuestas en tiempo real</div><div className="text-2xl font-black text-white">{aggregated.totalParticipants} <span className="text-sm font-medium text-slate-400">participantes</span></div></div></div>
