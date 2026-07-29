@@ -141,14 +141,6 @@ export default function App() {
           {!loading && error && <Notice kind="error">{error}</Notice>}
 
           {mode === 'attendee' && (
-            <div className="mb-2 flex flex-wrap items-start justify-between gap-3 pb-1">
-              <div>
-                <h2 className="text-xl font-bold text-white">Vista Asistente</h2>
-              </div>
-            </div>
-          )}
-
-          {mode === 'attendee' && (
             submittedResult ? (
               <div className="space-y-3 sm:space-y-5">
                 <div className="text-center">
