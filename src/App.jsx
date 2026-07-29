@@ -33,6 +33,7 @@ export default function App() {
   const [responses, setResponses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [attendeeStage, setAttendeeStage] = useState('identity');
 
   const [participantInfo, setParticipantInfo] = useState({ name: '', email: '' });
   const [answers, setAnswers] = useState({});
@@ -87,6 +88,7 @@ export default function App() {
     try {
       await createResponse(payload);
       setSubmittedResult({ name: payload.name, avg: average, answers, archetype: getArchetypeInfo(average) });
+      setAttendeeStage('identity');
       setParticipantInfo({ name: '', email: '' });
       setAnswers({});
       setStep(0);
@@ -128,7 +130,6 @@ export default function App() {
             <div>
               <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-300"><Sparkles className="h-3.5 w-3.5" />Implementación simple para evento</div>
               <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? 'Vista Speaker' : 'Vista Asistente'}</h2>
-              <p className="mt-1 text-sm text-slate-400">{isSupabaseConfigured ? 'Datos en Supabase con realtime.' : 'Modo demo local activo mientras configuras Supabase.'}</p>
             </div>
           </div>
 
@@ -164,34 +165,73 @@ export default function App() {
               </div>
             ) : (
               <form onSubmit={submitAssessment} className="space-y-6">
-                <div className="grid gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:grid-cols-2">
-                  <Field label="Nombre completo"><input type="text" required value={participantInfo.name} onChange={(e) => setParticipantInfo((p) => ({ ...p, name: e.target.value }))} placeholder="Ej. Ana María Silva" className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm outline-none focus:border-cyan-500" /></Field>
-                  <Field label="Correo electrónico"><input type="email" required value={participantInfo.email} onChange={(e) => setParticipantInfo((p) => ({ ...p, email: e.target.value }))} placeholder="ana@empresa.com" className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm outline-none focus:border-cyan-500" /></Field>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-slate-400"><span>Pregunta {step + 1} de {QUESTIONS.length}</span><span className="font-semibold text-cyan-400">{Math.round(((step + 1) / QUESTIONS.length) * 100)}%</span></div>
-                  <div className="h-2 overflow-hidden rounded-full border border-slate-800 bg-slate-950"><div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500" style={{ width: `${((step + 1) / QUESTIONS.length) * 100}%` }} /></div>
-                </div>
-                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
-                  <h3 className="text-lg font-bold text-white">{question.title}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{question.question}</p>
-                  <div className="mt-4 space-y-2">
-                    {question.options.map((option) => (
-                      <button key={option.val} type="button" onClick={() => { setAnswers((p) => ({ ...p, [question.id]: option.val })); if (step < QUESTIONS.length - 1) setStep((s) => s + 1); }} className={`flex w-full items-start justify-between gap-3 rounded-xl border p-3 text-left text-sm transition ${answers[question.id] === option.val ? 'border-cyan-500 bg-cyan-500/15 text-white' : 'border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700'}`}>
-                        <span>{option.text}</span>
-                        {answers[question.id] === option.val && <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />}
+                {attendeeStage === 'identity' ? (
+                  <>
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                      <h3 className="text-lg font-bold text-white">Antes de comenzar</h3>
+                      <p className="mt-2 text-sm text-slate-300">Déjanos tus datos y luego pasarás al cuestionario.</p>
+                      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                        <Field label="Nombre completo"><input type="text" required value={participantInfo.name} onChange={(e) => setParticipantInfo((p) => ({ ...p, name: e.target.value }))} placeholder="Ej. Ana María Silva" className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm outline-none focus:border-cyan-500" /></Field>
+                        <Field label="Correo electrónico"><input type="email" required value={participantInfo.email} onChange={(e) => setParticipantInfo((p) => ({ ...p, email: e.target.value }))} placeholder="ana@empresa.com" className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm outline-none focus:border-cyan-500" /></Field>
+                      </div>
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setError('');
+                          if (!participantInfo.name || !participantInfo.email) {
+                            setError('Completa nombre y correo para continuar.');
+                            return;
+                          }
+                          setAttendeeStage('questions');
+                        }}
+                        className="inline-flex items-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-700"
+                      >
+                        Continuar <ChevronRight className="h-4 w-4" />
                       </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <button type="button" disabled={step === 0} onClick={() => setStep((s) => Math.max(0, s - 1))} className="rounded-xl px-4 py-2.5 text-sm text-slate-400 disabled:opacity-40">Anterior</button>
-                  {step < QUESTIONS.length - 1 ? (
-                    <button type="button" onClick={() => setStep((s) => Math.min(QUESTIONS.length - 1, s + 1))} className="inline-flex items-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-700">Siguiente <ChevronRight className="h-4 w-4" /></button>
-                  ) : (
-                    <button type="submit" className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-bold text-slate-950">Enviar diagnóstico</button>
-                  )}
-                </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs text-slate-400"><span>Pregunta {step + 1} de {QUESTIONS.length}</span><span className="font-semibold text-cyan-400">{Math.round(((step + 1) / QUESTIONS.length) * 100)}%</span></div>
+                      <div className="h-2 overflow-hidden rounded-full border border-slate-800 bg-slate-950"><div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500" style={{ width: `${((step + 1) / QUESTIONS.length) * 100}%` }} /></div>
+                    </div>
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                      <h3 className="text-lg font-bold text-white">{question.title}</h3>
+                      <p className="mt-2 text-sm text-slate-300">{question.question}</p>
+                      <div className="mt-4 space-y-2">
+                        {question.options.map((option) => (
+                          <button key={option.val} type="button" onClick={() => setAnswers((p) => ({ ...p, [question.id]: option.val }))} className={`flex w-full items-start justify-between gap-3 rounded-xl border p-3 text-left text-sm transition ${answers[question.id] === option.val ? 'border-cyan-500 bg-cyan-500/15 text-white' : 'border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700'}`}>
+                            <span>{option.text}</span>
+                            {answers[question.id] === option.val && <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (step === 0) {
+                            setAttendeeStage('identity');
+                            return;
+                          }
+                          setStep((s) => Math.max(0, s - 1));
+                        }}
+                        className="rounded-xl px-4 py-2.5 text-sm text-slate-400"
+                      >
+                        Anterior
+                      </button>
+                      {step < QUESTIONS.length - 1 ? (
+                        <button type="button" disabled={!answers[question.id]} onClick={() => setStep((s) => Math.min(QUESTIONS.length - 1, s + 1))} className="inline-flex items-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Continuar <ChevronRight className="h-4 w-4" /></button>
+                      ) : (
+                        <button type="submit" disabled={!answers[question.id]} className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Enviar diagnóstico</button>
+                      )}
+                    </div>
+                  </>
+                )}
               </form>
             )
           )}
