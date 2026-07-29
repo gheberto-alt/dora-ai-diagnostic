@@ -140,11 +140,13 @@ export default function App() {
           {loading && <Notice kind="info">Cargando respuestas y preparando sincronización…</Notice>}
           {!loading && error && <Notice kind="error">{error}</Notice>}
 
-          <div className={`flex flex-wrap items-start justify-between gap-3 ${mode === 'attendee' ? 'mb-2 pb-1' : 'mb-3 border-b border-slate-800 pb-3 lg:mb-4'}`}>
-            <div>
-              <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? '' : 'Vista Asistente'}</h2>
+          {mode === 'attendee' && (
+            <div className="mb-2 flex flex-wrap items-start justify-between gap-3 pb-1">
+              <div>
+                <h2 className="text-xl font-bold text-white">Vista Asistente</h2>
+              </div>
             </div>
-          </div>
+          )}
 
           {mode === 'attendee' && (
             submittedResult ? (
