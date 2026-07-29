@@ -135,12 +135,12 @@ export default function App() {
         </div>
       </header>
 
-      <main className={`mx-auto w-full max-w-7xl ${mode === 'attendee' ? 'px-2 py-2 sm:px-4 sm:py-4 lg:px-8 lg:py-6' : 'px-4 py-6 lg:px-8'}`}>
-        <section className={`rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl shadow-slate-950/30 ${mode === 'attendee' ? 'p-3 sm:p-4' : 'p-5'}`}>
+      <main className={`mx-auto w-full max-w-7xl ${mode === 'attendee' ? 'px-2 py-2 sm:px-4 sm:py-4 lg:px-8 lg:py-6' : 'px-4 py-4 lg:px-6 lg:py-4 xl:px-8 xl:py-5'}`}>
+        <section className={`rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl shadow-slate-950/30 ${mode === 'attendee' ? 'p-3 sm:p-4' : 'p-4 lg:p-4 xl:p-5'}`}>
           {loading && <Notice kind="info">Cargando respuestas y preparando sincronización…</Notice>}
           {!loading && error && <Notice kind="error">{error}</Notice>}
 
-          <div className={`flex flex-wrap items-start justify-between gap-3 ${mode === 'attendee' ? 'mb-2 pb-1' : 'mb-5 border-b border-slate-800 pb-4'}`}>
+          <div className={`flex flex-wrap items-start justify-between gap-3 ${mode === 'attendee' ? 'mb-2 pb-1' : 'mb-3 border-b border-slate-800 pb-3 lg:mb-4'}`}>
             <div>
               <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? '' : 'Vista Asistente'}</h2>
             </div>
@@ -245,26 +245,26 @@ export default function App() {
           )}
 
           {mode === 'speaker' && (
-            <div className="space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+            <div className="space-y-4 lg:space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-950 p-3 lg:p-4">
                 <div className="flex items-center gap-3"><div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400"><Users className="h-5 w-5" /></div><div><div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Respuestas en tiempo real</div><div className="text-2xl font-black text-white">{aggregated.totalParticipants} <span className="text-sm font-medium text-slate-400">participantes</span></div></div></div>
               </div>
-              <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5 lg:p-6">
+              <div className="grid gap-4 lg:gap-5 xl:grid-cols-[1.55fr_0.88fr]">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5 lg:p-4 xl:p-5">
                   <h3 className="mb-2 flex items-center gap-2 text-lg font-bold"><BarChart3 className="h-5 w-5 text-cyan-400" />Silueta consolidada de la audiencia</h3>
                   <p className="text-sm text-slate-400">Promedio por capacidad comparado con benchmark 4.5.</p>
-                  <div className="mt-4 h-[420px] w-full sm:h-[520px] xl:h-[620px]"><ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="52%" outerRadius="78%" data={aggregated.radarData}><PolarGrid stroke="#334155" /><PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={speakerRadarTick} /><PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" /><Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} /><Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" /></RadarChart></ResponsiveContainer></div>
+                  <div className="mt-3 h-[420px] w-full sm:h-[520px] lg:h-[500px] xl:h-[560px]"><ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="52%" outerRadius="78%" data={aggregated.radarData}><PolarGrid stroke="#334155" /><PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={speakerRadarTick} /><PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" /><Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} /><Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" /></RadarChart></ResponsiveContainer></div>
                 </div>
-                <div className="space-y-6">
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                <div className="space-y-4 lg:space-y-5">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 lg:p-4 xl:p-5">
                     <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Diagnóstico consolidado</div>
-                    <div className="mt-3 flex items-end justify-between gap-3"><div><div className="text-5xl font-black text-cyan-400">{aggregated.overallAverage}</div><div className="text-sm text-slate-400">promedio general</div></div><Badge className={aggregated.archetype.badgeBg}>Silueta {aggregated.archetype.silhouette}</Badge></div>
-                    <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900 p-4"><p className="text-xs text-slate-400">Arquetipo predominante</p><p className="mt-1 font-bold text-white">{aggregated.archetype.cluster}</p><p className="mt-1 text-sm text-cyan-300">Estado: {aggregated.archetype.status}</p><p className="mt-1 text-sm text-slate-400">{aggregated.archetype.description}</p></div>
-                    <div className="mt-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-100"><div className="mb-2 flex items-center gap-2 font-bold text-amber-300"><AlertTriangle className="h-4 w-4" />Mensaje clave</div>{aggregated.archetype.speakerNote}</div>
+                    <div className="mt-2.5 flex items-end justify-between gap-3"><div><div className="text-4xl font-black text-cyan-400 lg:text-5xl">{aggregated.overallAverage}</div><div className="text-sm text-slate-400">promedio general</div></div><Badge className={aggregated.archetype.badgeBg}>Silueta {aggregated.archetype.silhouette}</Badge></div>
+                    <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900 p-3.5 lg:p-4"><p className="text-xs text-slate-400">Arquetipo predominante</p><p className="mt-1 font-bold text-white">{aggregated.archetype.cluster}</p><p className="mt-1 text-sm text-cyan-300">Estado: {aggregated.archetype.status}</p><p className="mt-1 text-sm text-slate-400">{aggregated.archetype.description}</p></div>
+                    <div className="mt-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-sm text-amber-100 lg:p-4"><div className="mb-2 flex items-center gap-2 font-bold text-amber-300"><AlertTriangle className="h-4 w-4" />Mensaje clave</div>{aggregated.archetype.speakerNote}</div>
                   </div>
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
-                    <div className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Desglose por capacidad</div>
-                    <div className="h-56 w-full"><ResponsiveContainer width="100%" height="100%"><BarChart data={aggregated.radarData} layout="vertical" margin={{ left: 20, right: 16 }}><XAxis type="number" domain={[0, 5]} stroke="#475569" tick={{ fontSize: 10 }} /><YAxis type="category" dataKey="subject" stroke="#cbd5e1" tick={{ fontSize: 10 }} width={80} /><Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} /><Bar dataKey="Promedio" radius={[0, 4, 4, 0]}>{aggregated.radarData.map((entry) => <Cell key={entry.id} fill={entry.Promedio < 2.5 ? '#f43f5e' : entry.Promedio < 3.5 ? '#f59e0b' : '#06b6d4'} />)}</Bar></BarChart></ResponsiveContainer></div>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 lg:p-4 xl:p-5">
+                    <div className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Desglose por capacidad</div>
+                    <div className="h-52 w-full lg:h-56"><ResponsiveContainer width="100%" height="100%"><BarChart data={aggregated.radarData} layout="vertical" margin={{ left: 20, right: 12 }}><XAxis type="number" domain={[0, 5]} stroke="#475569" tick={{ fontSize: 10 }} /><YAxis type="category" dataKey="subject" stroke="#cbd5e1" tick={{ fontSize: 10 }} width={80} /><Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} /><Bar dataKey="Promedio" radius={[0, 4, 4, 0]}>{aggregated.radarData.map((entry) => <Cell key={entry.id} fill={entry.Promedio < 2.5 ? '#f43f5e' : entry.Promedio < 3.5 ? '#f59e0b' : '#06b6d4'} />)}</Bar></BarChart></ResponsiveContainer></div>
                   </div>
                 </div>
               </div>
