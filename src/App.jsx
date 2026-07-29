@@ -242,11 +242,11 @@ export default function App() {
                 <div className="flex items-center gap-3"><div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400"><Users className="h-5 w-5" /></div><div><div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Respuestas en tiempo real</div><div className="text-2xl font-black text-white">{aggregated.totalParticipants} <span className="text-sm font-medium text-slate-400">participantes</span></div></div></div>
                 <button onClick={resetAll} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-rose-300"><RefreshCw className="h-4 w-4" />Reiniciar conteo</button>
               </div>
-              <div className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+              <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5 lg:p-6">
                   <h3 className="mb-2 flex items-center gap-2 text-lg font-bold"><BarChart3 className="h-5 w-5 text-cyan-400" />Silueta consolidada de la audiencia</h3>
                   <p className="text-sm text-slate-400">Promedio por capacidad comparado con benchmark 4.5.</p>
-                  <div className="h-[380px] w-full"><ResponsiveContainer width="100%" height="100%"><RadarChart data={aggregated.radarData}><PolarGrid stroke="#334155" /><PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={{ fill: '#e2e8f0', fontSize: 11, fontWeight: 600 }} /><PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" /><Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} /><Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" /></RadarChart></ResponsiveContainer></div>
+                  <div className="mt-4 h-[420px] w-full sm:h-[520px] xl:h-[620px]"><ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="52%" outerRadius="78%" data={aggregated.radarData}><PolarGrid stroke="#334155" /><PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={{ fill: '#e2e8f0', fontSize: 11, fontWeight: 600 }} /><PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" /><Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} /><Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" /></RadarChart></ResponsiveContainer></div>
                 </div>
                 <div className="space-y-6">
                   <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
