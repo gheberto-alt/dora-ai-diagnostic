@@ -4,13 +4,8 @@ import {
   BarChart3,
   CheckCircle2,
   ChevronRight,
-  Database,
-  ExternalLink,
-  Monitor,
-  QrCode,
   RefreshCw,
   ShieldCheck,
-  Smartphone,
   Sparkles,
   Users,
   Zap,
@@ -32,7 +27,7 @@ import {
 import { QUESTIONS } from './data';
 import { clearResponses, createResponse, getSessionId, listResponses, subscribeToResponses } from './lib/storage';
 import { isSupabaseConfigured } from './lib/supabase';
-import { aggregateResponses, buildQrUrl, calculateAverage, getArchetypeInfo, getBaseUrl, getRouteMode } from './utils';
+import { aggregateResponses, calculateAverage, getArchetypeInfo, getBaseUrl, getRouteMode } from './utils';
 
 const speakerAccessKey = import.meta.env.VITE_SPEAKER_ACCESS_KEY;
 
@@ -50,9 +45,6 @@ export default function App() {
   const [submittedResult, setSubmittedResult] = useState(null);
 
   const aggregated = useMemo(() => aggregateResponses(responses), [responses]);
-  const attendeeUrl = `${getBaseUrl()}/`;
-  const speakerUrl = `${getBaseUrl()}/speaker`;
-  const qrUrl = buildQrUrl(attendeeUrl);
   const question = QUESTIONS[step];
 
   useEffect(() => {
@@ -81,12 +73,6 @@ export default function App() {
       unsubscribe?.();
     };
   }, []);
-
-  const navigate = (nextMode) => {
-    const path = nextMode === 'attendee' ? '/' : `/${nextMode}`;
-    window.history.pushState({}, '', path);
-    setMode(nextMode);
-  };
 
   const submitAssessment = async (event) => {
     event.preventDefault();
@@ -127,23 +113,18 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-2"><Zap className="h-5 w-5" /></div>
             <div>
               <div className="flex items-center gap-2 text-xs"><span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span><span className="text-slate-600">•</span><span className="text-slate-400">DORA AI 2025</span></div>
-              <h1 className="text-base font-bold text-white sm:text-lg">MVP cloud con GitHub + Vercel + Supabase</h1>
+              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico DORA AI'}</h1>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-800 bg-slate-900 p-1 text-xs">
-            <ModeButton active={mode === 'attendee'} onClick={() => navigate('attendee')} icon={<Smartphone className="h-3.5 w-3.5" />}>Asistente</ModeButton>
-            <ModeButton active={mode === 'speaker'} onClick={() => navigate('speaker')} icon={<Monitor className="h-3.5 w-3.5" />}>Speaker</ModeButton>
-            <ModeButton active={mode === 'qr'} onClick={() => navigate('qr')} icon={<QrCode className="h-3.5 w-3.5" />}>QR</ModeButton>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-6 lg:grid-cols-[1.7fr_1fr] lg:px-8">
+      <main className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-8">
         <section className="rounded-3xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-slate-950/30">
           {loading && <Notice kind="info">Cargando respuestas y preparando sincronización…</Notice>}
           {!loading && error && <Notice kind="error">{error}</Notice>}
@@ -151,12 +132,11 @@ export default function App() {
           <div className="mb-5 flex flex-wrap items-start justify-between gap-3 border-b border-slate-800 pb-4">
             <div>
               <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-300"><Sparkles className="h-3.5 w-3.5" />Implementación simple para evento</div>
-              <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? 'Vista Speaker' : mode === 'qr' ? 'Pantalla QR' : 'Vista Asistente'}</h2>
+              <h2 className="text-xl font-bold text-white">{mode === 'speaker' ? 'Vista Speaker' : 'Vista Asistente'}</h2>
               <p className="mt-1 text-sm text-slate-400">{isSupabaseConfigured ? 'Datos en Supabase con realtime.' : 'Modo demo local activo mientras configuras Supabase.'}</p>
             </div>
             <div className="flex flex-col items-end gap-2 text-xs text-slate-400">
               <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1">Modo datos: {isSupabaseConfigured ? 'Cloud' : 'Local fallback'}</span>
-              <a href={speakerUrl} className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200">Abrir /speaker <ExternalLink className="h-3.5 w-3.5" /></a>
             </div>
           </div>
 
@@ -220,7 +200,6 @@ export default function App() {
                     <button type="submit" className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-bold text-slate-950">Enviar diagnóstico</button>
                   )}
                 </div>
-                <p className="text-xs text-slate-500">Registro económico aplicado: sin cuentas ni contraseñas; solo nombre + email + respuestas.</p>
               </form>
             )
           )}
@@ -264,33 +243,12 @@ export default function App() {
               </div>
             </div>
           )}
-
-          {mode === 'qr' && (
-            <div className="mx-auto max-w-2xl space-y-6 pt-8 text-center">
-              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">Pantalla de acceso</span>
-              <h3 className="text-3xl font-black text-white">Escanea y participa</h3>
-              <p className="text-sm text-slate-400">Vista pensada para proyectarse al inicio del evento.</p>
-              <div className="inline-block rounded-[2rem] border-4 border-cyan-500/30 bg-white p-5 shadow-2xl"><img src={qrUrl} alt="Código QR para asistentes" className="h-72 w-72 rounded-2xl" /></div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4"><div className="text-xs uppercase tracking-[0.2em] text-slate-500">URL directa</div><div className="mt-2 break-all text-lg font-bold text-cyan-400">{attendeeUrl}</div></div>
-              <button onClick={() => navigate('attendee')} className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 text-sm font-bold text-slate-950">Probar vista asistente</button>
-            </div>
-          )}
         </section>
-
-        <aside className="space-y-4">
-          <InfoCard icon={<Database className="h-4 w-4" />} title="Arquitectura recomendada" items={['GitHub para repositorio y despliegue', 'Vercel Hobby para hosting HTTPS', 'Supabase para respuestas y realtime', 'Sin login de asistentes']} />
-          <InfoCard icon={<ShieldCheck className="h-4 w-4" />} title="Registro más económico" items={['No crear cuentas ni contraseñas', 'Guardar nombre + email + respuestas', 'Usar session_id local del navegador', 'Exportar CSV luego del evento']} />
-          <InfoCard icon={<Users className="h-4 w-4" />} title="Checklist cloud" items={['Conectar repo en Vercel con GitHub', 'Configurar variables VITE_*', 'Crear tabla responses en Supabase', 'Probar /, /speaker y /qr antes del evento']} />
-        </aside>
       </main>
 
       <footer className="border-t border-slate-800 bg-slate-950 px-4 py-4 text-center text-xs text-slate-500">Congreso PMI Latam 2026 • MVP preparado para nube con GitHub</footer>
     </div>
   );
-}
-
-function ModeButton({ active, onClick, icon, children }) {
-  return <button onClick={onClick} className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 ${active ? 'bg-cyan-500 font-semibold text-slate-950' : 'text-slate-400 hover:text-white'}`}>{icon}{children}</button>;
 }
 
 function Field({ label, children }) {
@@ -303,13 +261,4 @@ function Badge({ className, children }) {
 
 function Notice({ kind, children }) {
   return <div className={`mb-4 rounded-2xl px-4 py-3 text-sm ${kind === 'error' ? 'border border-rose-500/30 bg-rose-500/10 text-rose-200' : 'border border-slate-800 bg-slate-900 text-slate-300'}`}>{children}</div>;
-}
-
-function InfoCard({ icon, title, items }) {
-  return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5 shadow-xl shadow-slate-950/20">
-      <div className="mb-3 flex items-center gap-2 text-sm font-bold text-white"><span className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-300">{icon}</span>{title}</div>
-      <ul className="space-y-2 text-sm text-slate-400">{items.map((item) => <li key={item} className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400" /><span>{item}</span></li>)}</ul>
-    </div>
-  );
 }

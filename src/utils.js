@@ -138,16 +138,11 @@ export function generateSimulatedResponses(count = 18) {
   });
 }
 
-export function buildQrUrl(targetUrl) {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(targetUrl)}`;
-}
-
 export function getBaseUrl() {
   return import.meta.env.VITE_APP_BASE_URL || window.location.origin;
 }
 
 export function getRouteMode(pathname) {
   if (pathname === '/speaker') return 'speaker';
-  if (pathname === '/qr') return 'qr';
   return 'attendee';
 }
