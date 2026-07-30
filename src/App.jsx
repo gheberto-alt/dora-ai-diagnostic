@@ -123,14 +123,8 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2 text-xs">
                 <span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span>
-                {mode !== 'speaker' && (
-                  <>
-                    <span className="text-slate-600">•</span>
-                    <span className="text-slate-400">DORA AI 2025</span>
-                  </>
-                )}
               </div>
-              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico DORA AI'}</h1>
+              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico D.O.R.A IA'}</h1>
             </div>
           </div>
           {mode === 'speaker' && (
@@ -202,7 +196,7 @@ export default function App() {
                       Anterior
                     </button>
                     {step < QUESTIONS.length - 1 ? (
-                      <button type="button" disabled={!answers[question.id]} onClick={() => setStep((s) => Math.min(QUESTIONS.length - 1, s + 1))} className="inline-flex items-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Continuar <ChevronRight className="h-4 w-4" /></button>
+                      <button type="button" disabled={!answers[question.id]} onClick={() => setStep((s) => Math.min(QUESTIONS.length - 1, s + 1))} className="inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2.5 text-sm font-bold text-slate-950 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40">Continuar <ChevronRight className="h-4 w-4" /></button>
                     ) : (
                       <button type="submit" disabled={!answers[question.id]} className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Enviar diagnóstico</button>
                     )}
