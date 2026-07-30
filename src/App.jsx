@@ -124,7 +124,7 @@ export default function App() {
               <div className="flex items-center gap-2 text-xs">
                 <span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span>
               </div>
-              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico D.O.R.A IA'}</h1>
+              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico D.O.R.A. IA'}</h1>
             </div>
           </div>
           {mode === 'speaker' && (
@@ -165,7 +165,6 @@ export default function App() {
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
-                <button onClick={() => setSubmittedResult(null)} className="w-full rounded-xl bg-slate-800 px-4 py-3 text-sm font-semibold hover:bg-slate-700">Realizar otro diagnóstico</button>
               </div>
             ) : (
               <form onSubmit={submitAssessment} className="space-y-3 sm:space-y-6">
