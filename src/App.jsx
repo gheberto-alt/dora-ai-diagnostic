@@ -125,7 +125,15 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-2"><Zap className="h-5 w-5" /></div>
             <div>
-              <div className="flex items-center gap-2 text-xs"><span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span><span className="text-slate-600">•</span><span className="text-slate-400">DORA AI 2025</span></div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span>
+                {mode !== 'speaker' && (
+                  <>
+                    <span className="text-slate-600">•</span>
+                    <span className="text-slate-400">DORA AI 2025</span>
+                  </>
+                )}
+              </div>
               <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico DORA AI'}</h1>
             </div>
           </div>
@@ -250,13 +258,13 @@ export default function App() {
                   <div className="mt-3 h-[420px] w-full sm:h-[520px] lg:min-h-0 lg:flex-1"><ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="52%" outerRadius="78%" data={aggregated.radarData}><PolarGrid stroke="#334155" /><PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={speakerRadarTick} /><PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" /><Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} /><Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" /></RadarChart></ResponsiveContainer></div>
                 </div>
                 <div className="space-y-3.5 lg:flex lg:min-h-0 lg:flex-col lg:space-y-3">
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-[1.05] lg:flex-col lg:p-3.5 xl:p-4">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-[1.2] lg:flex-col lg:p-3.5 xl:p-4">
                     <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Diagnóstico consolidado</div>
                     <div className="mt-2 flex items-end justify-between gap-3"><div><div className="text-4xl font-black text-cyan-400 lg:text-5xl">{aggregated.overallAverage}</div><div className="text-sm text-slate-400">promedio general</div></div><Badge className={aggregated.archetype.badgeBg}>Silueta {aggregated.archetype.silhouette}</Badge></div>
                     <div className="mt-2.5 rounded-2xl border border-slate-800 bg-slate-900 p-3 lg:p-3.5"><p className="text-xs text-slate-400">Arquetipo predominante</p><p className="mt-1 font-bold text-white">{aggregated.archetype.cluster}</p><p className="mt-1 text-sm text-cyan-300">Estado: {aggregated.archetype.status}</p><p className="mt-1 text-sm text-slate-400">{aggregated.archetype.description}</p></div>
-                    <div className="mt-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-100 lg:p-3.5"><div className="mb-1.5 flex items-center gap-2 font-bold text-amber-300"><AlertTriangle className="h-4 w-4" />Mensaje clave</div>{aggregated.archetype.speakerNote}</div>
+                    <div className="mt-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-[13px] leading-snug text-amber-100 lg:flex-1 lg:p-3.5 lg:text-sm"><div className="mb-1.5 flex items-center gap-2 font-bold text-amber-300"><AlertTriangle className="h-4 w-4" />Mensaje clave</div><div className="whitespace-normal break-words">{aggregated.archetype.speakerNote}</div></div>
                   </div>
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:p-3.5 xl:p-4">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-[0.8] lg:flex-col lg:p-3.5 xl:p-4">
                     <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Desglose por capacidad</div>
                     <div className="h-52 w-full lg:min-h-0 lg:flex-1"><ResponsiveContainer width="100%" height="100%"><BarChart data={aggregated.radarData} layout="vertical" margin={{ left: 20, right: 12 }}><XAxis type="number" domain={[0, 5]} stroke="#475569" tick={{ fontSize: 10 }} /><YAxis type="category" dataKey="subject" stroke="#cbd5e1" tick={{ fontSize: 10 }} width={80} /><Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} /><Bar dataKey="Promedio" radius={[0, 4, 4, 0]}>{aggregated.radarData.map((entry) => <Cell key={entry.id} fill={entry.Promedio < 2.5 ? '#f43f5e' : entry.Promedio < 3.5 ? '#f59e0b' : '#06b6d4'} />)}</Bar></BarChart></ResponsiveContainer></div>
                   </div>
