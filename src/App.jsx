@@ -158,9 +158,9 @@ export default function App() {
                 <div className="h-64 rounded-2xl border border-slate-800 bg-slate-950 p-3 sm:h-72 sm:p-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={QUESTIONS.map((q) => ({ subject: q.shortLabel, Puntaje: submittedResult.answers[q.id] || 0 }))}>
-                      <PolarGrid stroke="#334155" />
+                      <PolarGrid gridType="polygon" radialLines stroke="#334155" />
                       <PolarAngleAxis dataKey="subject" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                      <PolarRadiusAxis angle={30} domain={[0, 5]} stroke="#475569" />
+                      <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                       <Radar dataKey="Puntaje" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.45} />
                     </RadarChart>
                   </ResponsiveContainer>
