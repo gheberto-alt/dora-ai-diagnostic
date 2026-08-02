@@ -109,6 +109,7 @@ export default function App() {
     try {
       await clearResponses();
       setSubmittedResult(null);
+      window.location.reload();
     } catch (err) {
       setError(err.message || 'No fue posible reiniciar el conteo.');
     }
