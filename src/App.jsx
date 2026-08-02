@@ -125,7 +125,7 @@ export default function App() {
               <div className="flex items-center gap-2 text-xs">
                 <span className="font-semibold uppercase tracking-[0.2em] text-cyan-400">PMI Latam 2026</span>
               </div>
-              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Dashboard Speaker' : 'Diagnóstico D.O.R.A. IA'}</h1>
+              <h1 className="text-base font-bold text-white sm:text-lg">{mode === 'speaker' ? 'Diagnóstico D.O.R.A IA' : 'Diagnóstico D.O.R.A. IA'}</h1>
             </div>
           </div>
           {mode === 'speaker' && (
