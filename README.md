@@ -106,4 +106,63 @@ Esto baja costo, reduce fricción y simplifica la operación del evento.
 npm run dev
 npm run build
 npm run preview
+npm run load:test
 ```
+
+## Prueba de carga para el día del evento
+
+Puedes simular una audiencia de ~100 asistentes concurrentes sin servicios extra usando el script local:
+
+```bash
+npm run load:test -- --total=100 --concurrency=25 --mode=ramp --rampMs=15000 --jitterMs=250 --resetFirst=true --label=ensayo-general
+```
+
+### Parámetros disponibles
+
+- `--total=100` → total de respuestas a generar
+- `--concurrency=25` → cuántos envíos simultáneos máximos permite el script
+- `--mode=ramp` → `ramp` distribuye envíos en el tiempo, `burst` los dispara casi juntos
+- `--rampMs=15000` → ventana de distribución total en milisegundos
+- `--jitterMs=250` → variación aleatoria para parecer tráfico real
+- `--resetFirst=true` → inserta un reset lógico antes de empezar, sin borrar histórico
+- `--label=ensayo-general` → prefijo para identificar los datos de la prueba
+
+### Escenarios recomendados
+
+#### 1. Ensayo base
+
+```bash
+npm run load:test -- --total=20 --concurrency=10 --mode=ramp --rampMs=10000 --resetFirst=true --label=base
+```
+
+#### 2. Simulación del evento
+
+```bash
+npm run load:test -- --total=100 --concurrency=25 --mode=ramp --rampMs=15000 --resetFirst=true --label=evento-100
+```
+
+#### 3. Pico agresivo
+
+```bash
+npm run load:test -- --total=100 --concurrency=100 --mode=burst --jitterMs=100 --resetFirst=true --label=pico-100
+```
+
+### Qué mirar durante la prueba
+
+- `/speaker` debe reflejar el aumento de participantes
+- el radar debe recalcularse correctamente
+- no deberían perderse respuestas
+- la tasa de error ideal es `0%`
+- latencia promedio ideal: `< 1000 ms`
+- latencia máxima aceptable: `< 3000 ms`
+
+### Recomendación práctica
+
+Haz la prueba híbrida así:
+
+1. ejecuta el script de carga
+2. abre `/speaker` en una pantalla grande
+3. prueba además con `3 a 10` celulares reales al mismo tiempo
+4. usa **Reiniciar conteo** antes de cada nuevo escenario
+
+Esto te da una validación realista y económica para el evento.
