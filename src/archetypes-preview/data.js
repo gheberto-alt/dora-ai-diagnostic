@@ -6,7 +6,7 @@ export const QUESTIONS = [
     category: 'Rendimiento del equipo',
     shortLabel: '1. Equipo',
     title: '1. Rendimiento del equipo',
-    question: 'Mi equipo es altamente efectivo y posee una fuerza colaborativa sólida.',
+    question: 'Nuestro equipo colabora activamente para resolver problemas complejos sin depender de escalaciones externas.',
     reverseScore: false,
   },
   {
@@ -14,7 +14,7 @@ export const QUESTIONS = [
     category: 'Rendimiento del producto',
     shortLabel: '2. Producto',
     title: '2. Rendimiento del producto',
-    question: 'Los productos que construimos ayudan a los usuarios a completar tareas importantes de forma segura y con baja latencia.',
+    question: 'Las funcionalidades que entregamos cumplen consistentemente con necesidades reales de los usuarios.',
     reverseScore: false,
   },
   {
@@ -22,7 +22,7 @@ export const QUESTIONS = [
     category: 'Trabajo valioso',
     shortLabel: '3. Valor',
     title: '3. Trabajo valioso',
-    question: 'Dedico la mayor parte de mi tiempo a realizar tareas que considero valiosas y que valen la pena.',
+    question: 'La mayor parte del trabajo que realizo contribuye directamente a objetivos de negocio o usuario.',
     reverseScore: false,
   },
   {
@@ -30,23 +30,23 @@ export const QUESTIONS = [
     category: 'Fricción',
     shortLabel: '4. Fricción',
     title: '4. Fricción',
-    question: 'Encuentro obstáculos o impedimentos que dificultan significativamente mi trabajo diario.',
+    question: 'Necesito atravesar procesos burocráticos o dependencias innecesarias para avanzar en mi trabajo.',
     reverseScore: true,
   },
   {
     id: 5,
-    category: 'Agotamiento',
+    category: 'Burnout',
     shortLabel: '5. Burnout',
-    title: '5. Agotamiento (Burnout)',
-    question: 'Me siento exhausto o cínico con respecto a mi trabajo.',
+    title: '5. Burnout',
+    question: 'Me siento mentalmente agotado al final de la jornada laboral.',
     reverseScore: true,
   },
   {
     id: 6,
     category: 'Inestabilidad',
-    shortLabel: '6. Entrega',
-    title: '6. Inestabilidad en la entrega',
-    question: 'El proceso de entrega de software es inestable, propenso a errores o poco confiable.',
+    shortLabel: '6. Inestabilidad',
+    title: '6. Inestabilidad',
+    question: 'Los cambios en producción generan incidentes o retrabajo frecuentemente.',
     reverseScore: true,
   },
   {
@@ -54,25 +54,25 @@ export const QUESTIONS = [
     category: 'Efectividad individual',
     shortLabel: '7. Efectividad',
     title: '7. Efectividad individual',
-    question: 'Me siento altamente efectivo y con un gran sentido de realización en mis tareas.',
+    question: 'Tengo claridad sobre qué debo hacer y cómo priorizar mi trabajo.',
     reverseScore: false,
   },
   {
     id: 8,
     category: 'Throughput',
     shortLabel: '8. Throughput',
-    title: '8. Rendimiento de entrega (Throughput)',
-    question: 'Somos rápidos y eficientes para llevar los cambios desde el código hasta la producción.',
+    title: '8. Throughput',
+    question: 'El equipo entrega valor en ciclos cortos (días o pocas semanas).',
     reverseScore: false,
   },
 ];
 
 export const OPTIONS = [
-  { val: 1, text: '(1) Totalmente en desacuerdo / Nunca' },
-  { val: 2, text: '(2) En desacuerdo / Casi nunca' },
-  { val: 3, text: '(3) Neutral / A veces' },
-  { val: 4, text: '(4) De acuerdo / Casi siempre' },
-  { val: 5, text: '(5) Totalmente de acuerdo / Siempre' },
+  { val: 1, text: '(1) Nunca / Muy en desacuerdo' },
+  { val: 2, text: '(2) Rara vez' },
+  { val: 3, text: '(3) A veces' },
+  { val: 4, text: '(4) Frecuentemente' },
+  { val: 5, text: '(5) Siempre / Totalmente de acuerdo' },
 ];
 
 export const SAMPLE_NAMES = [
