@@ -63,12 +63,24 @@ export function calculateAverage(answers) {
  *
  * Within each shape, specific factor patterns determine the archetype cluster.
  */
-export function getArchetypeInfo(answers = {}, avg = 0) {
-  // Build normalized vector
+/**
+ * Build a normalized scores object from raw answers (applies inversion for negative factors).
+ * Used when answers come directly from the user's form submission.
+ */
+export function normalizeAnswers(rawAnswers = {}) {
   const scores = {};
   QUESTIONS.forEach((q) => {
-    scores[q.id] = normalizeScore(q, Number(answers?.[q.id] ?? 0));
+    scores[q.id] = normalizeScore(q, Number(rawAnswers?.[q.id] ?? 0));
   });
+  return scores;
+}
+
+/**
+ * Classify archetype from a NORMALIZED scores object (values already 1–5, higher = better for all).
+ * Do NOT pass raw answers here — use normalizeAnswers() first if needed.
+ */
+export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
+  const scores = normalizedScores;
 
   const teamPerf    = scores[1];
   const productPerf = scores[2];

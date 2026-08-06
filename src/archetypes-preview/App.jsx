@@ -24,7 +24,7 @@ import {
 } from 'recharts';
 import { OPTIONS, QUESTIONS } from './data';
 import { clearResponses, createResponse, getSessionId, listResponses, subscribeToResponses } from './storage';
-import { aggregateResponses, calculateAverage, getArchetypeInfo, getRouteMode } from './utils';
+import { aggregateResponses, calculateAverage, getArchetypeInfo, getRouteMode, normalizeAnswers } from './utils';
 
 export default function ArchetypesPreviewApp() {
   const [mode, setMode] = useState(getRouteMode(window.location.pathname));
@@ -85,7 +85,7 @@ export default function ArchetypesPreviewApp() {
     if (Object.keys(answers).length !== QUESTIONS.length) return setError(`Responde las ${QUESTIONS.length} preguntas antes de enviar.`);
 
     const average = calculateAverage(answers);
-    const archetype = getArchetypeInfo(answers, average);
+    const archetype = getArchetypeInfo(normalizeAnswers(answers), average);
     const payload = {
       session_id: getSessionId(),
       name: 'Preview arquetipos',
@@ -161,7 +161,7 @@ export default function ArchetypesPreviewApp() {
                 </div>
                 <div className="h-64 rounded-2xl border border-slate-800 bg-slate-950 p-3 sm:h-72 sm:p-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={QUESTIONS.map((q) => ({ subject: q.shortLabel, Puntaje: submittedResult.answers[q.id] || 0 }))}>
+                    <RadarChart data={QUESTIONS.map((q) => ({ subject: q.shortLabel, Puntaje: normalizeAnswers(submittedResult.answers)[q.id] || 0 }))}>
                       <PolarGrid gridType="polygon" radialLines stroke="#334155" />
                       <PolarAngleAxis dataKey="subject" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                       <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
