@@ -24,7 +24,7 @@ import {
 } from 'recharts';
 import { OPTIONS, QUESTIONS } from './data';
 import { clearResponses, createResponse, getSessionId, listResponses, subscribeToResponses } from './storage';
-import { aggregateResponses, calculateAverage, getArchetypeInfo, getNavigationPath, getRouteMode } from './utils';
+import { aggregateResponses, calculateAverage, getArchetypeInfo, getRouteMode } from './utils';
 
 export default function ArchetypesPreviewApp() {
   const [mode, setMode] = useState(getRouteMode(window.location.pathname));
@@ -79,12 +79,6 @@ export default function ArchetypesPreviewApp() {
     };
   }, []);
 
-  const navigateTo = (nextMode) => {
-    const nextPath = getNavigationPath(nextMode);
-    window.history.pushState({}, '', nextPath);
-    setMode(nextMode);
-  };
-
   const submitAssessment = async (event) => {
     event.preventDefault();
     setError('');
@@ -136,12 +130,6 @@ export default function ArchetypesPreviewApp() {
           </div>
 
           <div className="flex items-center gap-2">
-            {mode !== 'attendee' && (
-              <button onClick={() => navigateTo('attendee')} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-cyan-300">Vista asistente</button>
-            )}
-            {mode !== 'speaker' && (
-              <button onClick={() => navigateTo('speaker')} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-cyan-300">Vista speaker</button>
-            )}
             {mode === 'speaker' && (
               <button onClick={resetAll} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-rose-300"><RefreshCw className="h-4 w-4" />Reiniciar conteo</button>
             )}
