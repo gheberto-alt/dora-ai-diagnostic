@@ -8,13 +8,26 @@ function normalizeScore(question, value) {
   return question.reverseScore ? 6 - numeric : numeric;
 }
 
+function isPreviewPath(pathname) {
+  return pathname === PREVIEW_BASE_PATH || pathname.startsWith(`${PREVIEW_BASE_PATH}/`);
+}
+
 export function getRouteMode(pathname) {
-  if (pathname === `${PREVIEW_BASE_PATH}/speaker`) return 'speaker';
+  if (pathname === `${PREVIEW_BASE_PATH}/speaker` || pathname === '/speaker') return 'speaker';
   return 'attendee';
 }
 
 export function getNavigationPath(mode) {
-  return mode === 'speaker' ? `${PREVIEW_BASE_PATH}/speaker` : PREVIEW_BASE_PATH;
+  const pathname = window.location.pathname;
+  if (isPreviewPath(pathname)) {
+    return mode === 'speaker' ? `${PREVIEW_BASE_PATH}/speaker` : PREVIEW_BASE_PATH;
+  }
+
+  return mode === 'speaker' ? '/speaker' : '/';
+}
+
+export function isPreviewRoute(pathname) {
+  return isPreviewPath(pathname);
 }
 
 export function calculateAverage(answers) {
