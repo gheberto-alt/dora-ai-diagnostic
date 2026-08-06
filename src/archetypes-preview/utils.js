@@ -80,7 +80,12 @@ export function normalizeAnswers(rawAnswers = {}) {
  * Do NOT pass raw answers here — use normalizeAnswers() first if needed.
  */
 export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
-  const scores = normalizedScores;
+  // Normalize keys: convert string keys to numbers to ensure consistent access
+  const scores = {};
+  QUESTIONS.forEach((q) => {
+    const val = normalizedScores[q.id] ?? normalizedScores[String(q.id)] ?? 0;
+    scores[q.id] = Number(val);
+  });
 
   const teamPerf    = scores[1];
   const productPerf = scores[2];
@@ -95,7 +100,7 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
   const allFactorsPresent = validScores.length === QUESTIONS.length;
 
   // If no data at all, return placeholder
-  if (!allFactorsPresent && avg === 0) {
+  if (avg === 0 && validScores.length === 0) {
     return {
       silhouette: '—',
       cluster: 'Sin datos',
@@ -111,8 +116,10 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
   const maxScore = Math.max(...validScores);
   const spread = maxScore - minScore;
 
-  // ── ARCHETYPE 7: Triunfadores armoniosos (large + balanced, all excellent)
-  if (avg >= 4.2 && minScore >= 3.5) {
+  // ── Clasificación por forma del radar (avg + spread) + señales específicas
+  //
+  // ARCHETYPE 7 — Triunfadores armoniosos: forma expandida y equilibrada
+  if (avg >= 4.0 && spread <= 1.5) {
     return {
       silhouette: 'Expandida',
       cluster: '7. Triunfadores armoniosos',
@@ -124,8 +131,8 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
     };
   }
 
-  // ── ARCHETYPE 6: Ejecutores pragmáticos (large + stable delivery, moderate friction/burnout)
-  if (avg >= 3.8 && throughput >= 4 && instability >= 3.5 && minScore >= 2.5) {
+  // ARCHETYPE 6 — Ejecutores pragmáticos: forma expandida con buen throughput e inestabilidad controlada
+  if (avg >= 3.8 && spread <= 2.0 && throughput >= 3.5 && instability >= 3.0) {
     return {
       silhouette: 'Expandida',
       cluster: '6. Ejecutores pragmáticos',
@@ -137,8 +144,8 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
     };
   }
 
-  // ── ARCHETYPE 5: Estables y metódicos (steady shape, good quality, slow throughput)
-  if (avg >= 3.5 && productPerf >= 4 && valuableWork >= 4 && throughput < 3.5 && spread < 2.5) {
+  // ARCHETYPE 5 — Estables y metódicos: forma estable, buena calidad pero baja velocidad
+  if (avg >= 3.3 && spread <= 2.0 && productPerf >= 3.5 && valuableWork >= 3.5 && throughput < 3.5) {
     return {
       silhouette: 'Estable',
       cluster: '5. Estables y metódicos',
@@ -150,8 +157,8 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
     };
   }
 
-  // ── ARCHETYPE 4: Alto impacto, baja cadencia (irregular: high product/individual, low throughput/instability)
-  if (productPerf >= 4 && individual >= 4 && (throughput < 3 || instability < 3) && spread >= 2) {
+  // ARCHETYPE 4 — Alto impacto, baja cadencia: forma irregular con alta efectividad pero baja velocidad/estabilidad
+  if (avg >= 3.0 && spread > 1.5 && (productPerf + individual) / 2 >= 3.5 && (throughput < 3.0 || instability < 3.0)) {
     return {
       silhouette: 'Irregular',
       cluster: '4. Alto impacto, baja cadencia',
@@ -163,8 +170,8 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
     };
   }
 
-  // ── ARCHETYPE 3: Limitados por el proceso (irregular: low friction/individual, high spread)
-  if (friction < 3 && (individual < 3 || valuableWork < 3) && spread >= 2) {
+  // ARCHETYPE 3 — Limitados por el proceso: forma irregular con alta fricción y baja efectividad
+  if (avg >= 2.5 && spread > 1.5 && friction < 3.0 && (individual < 3.0 || valuableWork < 3.0)) {
     return {
       silhouette: 'Irregular',
       cluster: '3. Limitados por el proceso',
@@ -176,42 +183,41 @@ export function getArchetypeInfo(normalizedScores = {}, avg = 0) {
     };
   }
 
-  // ── ARCHETYPE 2: Cuello de botella legado (contracted: weak product + high instability)
-  if (productPerf < 3 && instability < 2.5) {
+  // ARCHETYPE 2 — Cuello de botella legado: forma contraída con producto débil y alta inestabilidad
+  if (avg < 3.3 && (productPerf < 3.0 || instability < 3.0)) {
     return {
       silhouette: 'Contraída',
       cluster: '2. El cuello de botella legado',
       status: 'Reactividad sistémica',
-      description: 'Forma pequeña con producto débil y alta inestabilidad. El sistema legado dicta el ritmo y genera trabajo reactivo constante.',
+      description: 'Forma pequeña con producto débil o alta inestabilidad. El sistema de entrega dicta el ritmo y genera trabajo reactivo constante.',
       badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
       color: '#f59e0b',
       speakerNote: 'Antes de acelerar, hay que intervenir el sistema de entrega. La inestabilidad consume energía que no se convierte en valor.',
     };
   }
 
-  // ── ARCHETYPE 1: Desafíos fundamentales (contracted: low avg + multiple risk factors critical)
-  if (avg < 2.8 && friction < 2.5 && burnout < 2.5) {
+  // ARCHETYPE 1 — Desafíos fundamentales: forma muy contraída con múltiples factores críticos
+  if (avg < 2.8) {
     return {
       silhouette: 'Contraída',
       cluster: '1. Desafíos fundamentales',
       status: 'Supervivencia',
-      description: 'Forma pequeña y comprimida: bajo rendimiento generalizado, alta fricción y burnout en zona crítica.',
+      description: 'Forma pequeña y comprimida: bajo rendimiento generalizado con fricción, burnout e inestabilidad en zona crítica.',
       badgeBg: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
       color: '#f43f5e',
       speakerNote: 'El equipo está en modo supervivencia. Antes de cualquier mejora técnica o de proceso, hay que estabilizar el bienestar y reducir la fricción.',
     };
   }
 
-  // ── FALLBACK: Zona de transición
-  const silhouette = avg >= 4.0 ? 'Expandida' : avg >= 3.0 ? (spread >= 2.5 ? 'Irregular' : 'Estable') : 'Contraída';
+  // ── FALLBACK final (debería ser rarísimo llegar aquí con avg >= 2.8 y < 3.3)
   return {
-    silhouette,
-    cluster: 'Zona intermedia',
-    status: avg >= 3.5 ? 'Transición positiva' : avg >= 3.0 ? 'Transición' : 'Atención',
-    description: 'El equipo muestra señales mixtas: algunos factores sanos, otros con fricción o desgaste. La forma del radar revela dónde está la brecha.',
-    badgeBg: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    color: '#06b6d4',
-    speakerNote: 'Mira qué factores se comprimen hacia el centro: ahí está la prioridad. Los factores de riesgo (fricción, burnout, inestabilidad) son los que más limitan el potencial.',
+    silhouette: 'Estable',
+    cluster: '5. Estables y metódicos',
+    status: 'Calidad consistente',
+    description: 'Rendimiento moderado y estable con oportunidades de mejora en velocidad o impacto.',
+    badgeBg: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    color: '#3b82f6',
+    speakerNote: 'El equipo tiene una base sólida. La prioridad es identificar qué factor específico limita más el progreso y atacarlo con foco.',
   };
 }
 
