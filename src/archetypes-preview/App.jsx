@@ -147,27 +147,40 @@ export default function ArchetypesPreviewApp() {
               <div className="space-y-3 sm:space-y-5">
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-white">¡Diagnóstico registrado!</h3>
-                  <p className="mt-1 text-sm text-slate-400">Esta es la preview del cuestionario corregido de 8 factores.</p>
+                  <p className="mt-1 text-sm text-slate-400">Tu respuesta ya está en el radar del equipo.</p>
                 </div>
-                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center sm:p-5">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Tu puntaje promedio normalizado</p>
-                  <div className="mt-2 text-5xl font-black text-cyan-400">{submittedResult.avg}</div>
-                  <div className="mt-3 flex flex-wrap justify-center gap-2">
-                    <Badge className={submittedResult.archetype.badgeBg}>Silueta: {submittedResult.archetype.silhouette}</Badge>
-                    <Badge className={submittedResult.archetype.badgeBg}>Estado: {submittedResult.archetype.status}</Badge>
+
+                {/* Arquetipo individual */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Tu arquetipo individual</p>
+                  <div className="mt-2 flex items-end justify-between gap-3">
+                    <div>
+                      <div className="text-3xl font-black text-cyan-400 sm:text-4xl">{submittedResult.avg}</div>
+                      <div className="text-sm text-slate-400">promedio normalizado</div>
+                    </div>
+                    <Badge className={submittedResult.archetype.badgeBg}>Silueta {submittedResult.archetype.silhouette}</Badge>
                   </div>
-                  <p className="mt-3 font-semibold text-white">{submittedResult.archetype.cluster}</p>
-                  <p className="mt-1 text-sm text-slate-400">{submittedResult.archetype.description}</p>
+                  <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900 p-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Arquetipo predominante</p>
+                    <p className="mt-1 font-bold text-white">{submittedResult.archetype.cluster}</p>
+                    <p className="mt-1 text-sm text-cyan-300">Estado: {submittedResult.archetype.status}</p>
+                    <p className="mt-1 text-sm text-slate-400">{submittedResult.archetype.description}</p>
+                  </div>
                 </div>
+
+                {/* Radar individual */}
                 <div className="h-64 rounded-2xl border border-slate-800 bg-slate-950 p-3 sm:h-72 sm:p-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={QUESTIONS.map((q) => ({ subject: q.shortLabel, Puntaje: normalizeAnswers(submittedResult.answers)[q.id] || 0 }))}>
-                      <PolarGrid gridType="polygon" radialLines stroke="#334155" />
-                      <PolarAngleAxis dataKey="subject" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                      <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                      <Radar dataKey="Puntaje" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.45} />
-                    </RadarChart>
-                  </ResponsiveContainer>
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Tu perfil de 8 factores</p>
+                  <div className="h-56 sm:h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={QUESTIONS.map((q) => ({ subject: q.shortLabel, Puntaje: normalizeAnswers(submittedResult.answers)[q.id] || 0 }))}>
+                        <PolarGrid gridType="polygon" radialLines stroke="#334155" />
+                        <PolarAngleAxis dataKey="subject" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                        <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                        <Radar dataKey="Puntaje" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.45} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </div>
             ) : (
