@@ -422,87 +422,105 @@ export default function ArchetypesPreviewApp() {
   // ── Speaker view ──────────────────────────────────────────────────────────
   if (mode === 'speaker') {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 lg:flex lg:h-screen lg:flex-col lg:overflow-hidden">
-        <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+      <div
+        className="min-h-screen text-slate-100 lg:flex lg:h-screen lg:flex-col lg:overflow-hidden"
+        style={{
+          background:
+            'radial-gradient(circle at 15% 20%, rgba(255,98,0,.34), transparent 25%), radial-gradient(circle at 85% 10%, rgba(182,98,255,.28), transparent 22%), radial-gradient(circle at 70% 85%, rgba(247,44,115,.18), transparent 16%), linear-gradient(135deg, #26011f 0%, #4c073d 24%, #600f39 48%, #791835 72%, #fb150c 100%)',
+        }}
+      >
+        <header
+          className="sticky top-0 z-50 backdrop-blur"
+          style={{ borderBottom: '1px solid rgba(255,255,255,.12)', background: 'rgba(18,9,30,.88)' }}
+        >
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
             <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-2"><Zap className="h-5 w-5" /></div>
+              <div className="rounded-2xl p-2" style={{ background: 'linear-gradient(135deg, #f72c73, #b662ff)' }}><Zap className="h-5 w-5 text-white" /></div>
               <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">Identificación de arquetipo de equipo</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: '#f72c73' }}>Identificación de arquetipo de equipo</div>
                 <h1 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">Diagnóstico D.O.R.A. IA</h1>
               </div>
             </div>
-            <button onClick={resetAll} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-300 hover:text-rose-300">
+            <button
+              onClick={resetAll}
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold"
+              style={{ border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.06)', color: 'rgba(255,255,255,.85)' }}
+            >
               <RefreshCw className="h-4 w-4" />Reiniciar conteo
             </button>
           </div>
         </header>
 
         <main className="mx-auto w-full max-w-7xl px-4 py-4 lg:flex-1 lg:min-h-0 lg:px-5 lg:py-3 xl:px-6 xl:py-4 lg:overflow-hidden">
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl shadow-slate-950/30 p-4 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden lg:p-4 xl:p-4">
-            {loading && <Notice kind="info">Cargando respuestas y preparando sincronización…</Notice>}
-            {!loading && error && <Notice kind="error">{error}</Notice>}
+          <section
+            className="rounded-3xl p-4 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden lg:p-4 xl:p-4"
+            style={{ background: 'rgba(18,9,30,.78)', border: '1px solid rgba(255,255,255,.12)', boxShadow: '0 22px 60px rgba(0,0,0,.32)', backdropFilter: 'blur(12px)' }}
+          >
+            {loading && <div style={{ padding: '12px 16px', borderRadius: 14, background: 'rgba(182,98,255,.1)', border: '1px solid rgba(182,98,255,.2)', color: 'rgba(255,255,255,.76)', fontSize: 13, marginBottom: 12 }}>Cargando respuestas y preparando sincronización…</div>}
+            {!loading && error && <div style={{ padding: '12px 16px', borderRadius: 14, background: 'rgba(255,123,148,.1)', border: '1px solid rgba(255,123,148,.2)', color: '#ff7b94', fontSize: 13, marginBottom: 12 }}>{error}</div>}
 
             <div className="space-y-4 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-950 p-3 lg:shrink-0 lg:p-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-3 lg:shrink-0 lg:p-3" style={{ border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.045)' }}>
                 <div className="flex items-center gap-2.5">
-                  <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-1.5 text-cyan-400"><Users className="h-5 w-5" /></div>
+                  <div className="rounded-xl p-1.5" style={{ border: '1px solid rgba(247,44,115,.2)', background: 'rgba(247,44,115,.1)', color: '#f72c73' }}><Users className="h-5 w-5" /></div>
                   <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Respuestas en tiempo real</div>
-                    <div className="text-xl font-black text-white lg:text-2xl">{aggregated.totalParticipants} <span className="text-xs font-medium text-slate-400 lg:text-sm">participantes</span></div>
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,.6)' }}>Respuestas en tiempo real</div>
+                    <div className="text-xl font-black text-white lg:text-2xl">{aggregated.totalParticipants} <span className="text-xs font-medium lg:text-sm" style={{ color: 'rgba(255,255,255,.6)' }}>participantes</span></div>
                   </div>
                 </div>
               </div>
 
               <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1.55fr_0.88fr] lg:gap-4">
-                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5 lg:flex lg:min-h-0 lg:flex-col lg:p-4 xl:p-4">
-                  <h3 className="mb-2 flex items-center gap-2 text-lg font-bold"><BarChart3 className="h-5 w-5 text-cyan-400" />Silueta consolidada de la audiencia</h3>
-                  <p className="text-sm text-slate-400">Todos los ejes en escala 1–5 (más alto = mejor). Fricción, burnout e inestabilidad están invertidos.</p>
+                <div className="rounded-2xl p-4 sm:p-5 lg:flex lg:min-h-0 lg:flex-col lg:p-4 xl:p-4" style={{ border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.04)' }}>
+                  <h3 className="mb-2 flex items-center gap-2 text-lg font-bold" style={{ color: 'white' }}><BarChart3 className="h-5 w-5" style={{ color: '#f72c73' }} />Silueta consolidada de la audiencia</h3>
+                  <p className="text-sm" style={{ color: 'rgba(255,255,255,.6)' }}>Todos los ejes en escala 1–5 (más alto = mejor). Fricción, burnout e inestabilidad están invertidos.</p>
                   <div className="mt-3 h-[420px] w-full sm:h-[520px] lg:min-h-0 lg:flex-1">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="52%" outerRadius="78%" data={aggregated.radarData}>
-                        <PolarGrid gridType="polygon" radialLines stroke="#334155" />
-                        <PolarAngleAxis dataKey="subject" stroke="#cbd5e1" tick={speakerRadarTick} />
-                        <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                        <Radar dataKey="Promedio" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.48} />
-                        <Radar dataKey="Benchmark" stroke="#38bdf8" strokeDasharray="4 4" fill="transparent" />
+                        <PolarGrid gridType="polygon" radialLines stroke="rgba(255,255,255,.1)" />
+                        <PolarAngleAxis dataKey="subject" stroke="rgba(255,255,255,.5)" tick={speakerRadarTick} />
+                        <PolarRadiusAxis angle={30} domain={[0, 5]} tickCount={6} stroke="rgba(255,255,255,.15)" tick={{ fill: 'rgba(255,255,255,.45)', fontSize: 11 }} />
+                        <Radar dataKey="Promedio" stroke="#f72c73" fill="#f72c73" fillOpacity={0.35} />
+                        <Radar dataKey="Benchmark" stroke="#b662ff" strokeDasharray="4 4" fill="transparent" />
                       </RadarChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
 
                 <div className="space-y-3.5 lg:flex lg:min-h-0 lg:flex-col lg:space-y-3">
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-[1.2] lg:flex-col lg:p-3.5 xl:p-4">
-                    <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Diagnóstico consolidado</div>
+                  <div className="rounded-2xl p-3.5 lg:flex lg:min-h-0 lg:flex-[1.2] lg:flex-col lg:p-3.5 xl:p-4" style={{ border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.04)' }}>
+                    <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,.6)' }}>Diagnóstico consolidado</div>
                     <div className="mt-2 flex items-end justify-between gap-3">
                       <div>
-                        <div className="text-4xl font-black text-cyan-400 lg:text-5xl">{aggregated.overallAverage}</div>
-                        <div className="text-sm text-slate-400">promedio normalizado del equipo</div>
+                        <div className="text-4xl font-black lg:text-5xl" style={{ color: '#f72c73' }}>{aggregated.overallAverage}</div>
+                        <div className="text-sm" style={{ color: 'rgba(255,255,255,.6)' }}>promedio normalizado del equipo</div>
                       </div>
-                      <Badge className={aggregated.archetype.badgeBg}>Silueta {aggregated.archetype.silhouette}</Badge>
+                      <span className="inline-flex rounded-full border px-3 py-1 text-xs font-semibold" style={{ background: 'rgba(247,44,115,.15)', color: '#f72c73', borderColor: 'rgba(247,44,115,.25)' }}>
+                        Silueta {aggregated.archetype.silhouette}
+                      </span>
                     </div>
-                    <div className="mt-2.5 rounded-2xl border border-slate-800 bg-slate-900 p-3 lg:p-3.5">
-                      <p className="text-xs text-slate-400">Arquetipo predominante</p>
+                    <div className="mt-2.5 rounded-2xl p-3 lg:p-3.5" style={{ border: '1px solid rgba(255,255,255,.08)', background: 'rgba(255,255,255,.04)' }}>
+                      <p className="text-xs" style={{ color: 'rgba(255,255,255,.6)' }}>Arquetipo predominante</p>
                       <p className="mt-1 font-bold text-white">{aggregated.archetype.cluster}</p>
-                      <p className="mt-1 text-sm text-cyan-300">Estado: {aggregated.archetype.status}</p>
-                      <p className="mt-1 text-sm text-slate-400">{aggregated.archetype.description}</p>
+                      <p className="mt-1 text-sm" style={{ color: '#b662ff' }}>Estado: {aggregated.archetype.status}</p>
+                      <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,.65)' }}>{aggregated.archetype.description}</p>
                     </div>
-                    <div className="mt-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-[13px] leading-snug text-amber-100 lg:flex-1 lg:p-3.5 lg:text-sm">
-                      <div className="mb-1.5 flex items-center gap-2 font-bold text-amber-300"><AlertTriangle className="h-4 w-4" />Mensaje clave</div>
+                    <div className="mt-2.5 rounded-2xl p-3 text-[13px] leading-snug lg:flex-1 lg:p-3.5 lg:text-sm" style={{ border: '1px solid rgba(255,177,74,.2)', background: 'rgba(255,177,74,.08)', color: 'rgba(255,255,255,.85)' }}>
+                      <div className="mb-1.5 flex items-center gap-2 font-bold" style={{ color: '#ffb14a' }}><AlertTriangle className="h-4 w-4" />Mensaje clave</div>
                       <div className="whitespace-normal break-words">{aggregated.archetype.speakerNote}</div>
                     </div>
                   </div>
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 lg:flex lg:min-h-0 lg:flex-[0.8] lg:flex-col lg:p-3.5 xl:p-4">
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Desglose por factor</div>
+                  <div className="rounded-2xl p-3.5 lg:flex lg:min-h-0 lg:flex-[0.8] lg:flex-col lg:p-3.5 xl:p-4" style={{ border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.04)' }}>
+                    <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,.6)' }}>Desglose por factor</div>
                     <div className="h-52 w-full lg:min-h-0 lg:flex-1">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={aggregated.radarData} layout="vertical" margin={{ left: 20, right: 12 }}>
-                          <XAxis type="number" domain={[0, 5]} stroke="#475569" tick={{ fontSize: 10 }} />
-                          <YAxis type="category" dataKey="subject" stroke="#cbd5e1" tick={{ fontSize: 10 }} width={80} />
-                          <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }} formatter={(value) => [value, 'Promedio normalizado']} />
+                          <XAxis type="number" domain={[0, 5]} stroke="rgba(255,255,255,.2)" tick={{ fontSize: 10, fill: 'rgba(255,255,255,.5)' }} />
+                          <YAxis type="category" dataKey="subject" stroke="rgba(255,255,255,.2)" tick={{ fontSize: 10, fill: 'rgba(255,255,255,.7)' }} width={80} />
+                          <Tooltip contentStyle={{ backgroundColor: 'rgba(18,9,30,.95)', borderColor: 'rgba(255,255,255,.12)', borderRadius: '12px', fontSize: '12px' }} formatter={(value) => [value, 'Promedio normalizado']} />
                           <Bar dataKey="Promedio" radius={[0, 4, 4, 0]}>
                             {aggregated.radarData.map((entry) => (
-                              <Cell key={entry.id} fill={entry.Promedio >= 4 ? '#10b981' : entry.Promedio >= 3 ? '#06b6d4' : entry.Promedio >= 2 ? '#f59e0b' : '#f43f5e'} />
+                              <Cell key={entry.id} fill={entry.Promedio >= 4 ? '#50e3a4' : entry.Promedio >= 3 ? '#b662ff' : entry.Promedio >= 2 ? '#ffb14a' : '#ff7b94'} />
                             ))}
                           </Bar>
                         </BarChart>
